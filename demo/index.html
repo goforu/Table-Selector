@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Table Selector Demo</title>
+    <link rel="stylesheet" href="../css/selector.css">
+    <style type="text/css">
+        table, th, td {
+            border: 1px solid;
+        }
+    </style>
+</head>
+<body>
+<div id="selector"></div>
+<table id="target">
+    <thead>
+    <tr>
+        <td>Header1</td>
+        <td>Header2</td>
+        <td>Header3</td>
+    </tr>
+    </thead>
+    <tbody>
+    <tr data="我是第1排">
+        <td>11</td>
+        <td>12</td>
+        <td>13</td>
+    </tr>
+    <tr data="我是第2排">
+        <td>21</td>
+        <td>22</td>
+        <td>23</td>
+    </tr>
+    <tr data="我是第3排">
+        <td>31</td>
+        <td>32</td>
+        <td>33</td>
+    </tr>
+    <tr data="我是第1排">
+        <td>11</td>
+        <td>12</td>
+        <td>13</td>
+    </tr>
+    <tr data="我是第2排">
+        <td>21</td>
+        <td>22</td>
+        <td>23</td>
+    </tr>
+    <tr data="我是第3排">
+        <td>31</td>
+        <td>32</td>
+        <td>33</td>
+    </tr>
+    <tr data="我是第1排">
+        <td>11</td>
+        <td>12</td>
+        <td>13</td>
+    </tr>
+    <tr data="我是第2排">
+        <td>21</td>
+        <td>22</td>
+        <td>23</td>
+    </tr>
+    <tr data="我是第3排">
+        <td>31</td>
+        <td>32</td>
+        <td>33</td>
+    </tr>
+    <tr data="我是第1排">
+        <td>11</td>
+        <td>12</td>
+        <td>13</td>
+    </tr>
+    <tr data="我是第2排">
+        <td>21</td>
+        <td>22</td>
+        <td>23</td>
+    </tr>
+    <tr data="我是第3排">
+        <td>31</td>
+        <td>32</td>
+        <td>33</td>
+    </tr>
+    <tr data="我是第1排">
+        <td>11</td>
+        <td>12</td>
+        <td>13</td>
+    </tr>
+    <tr data="我是第2排">
+        <td>21</td>
+        <td>22</td>
+        <td>23</td>
+    </tr>
+    <tr data="我是第3排">
+        <td>31</td>
+        <td>32</td>
+        <td>33</td>
+    </tr>
+    <tr data="我是第1排">
+        <td>11</td>
+        <td>12</td>
+        <td>13</td>
+    </tr>
+    <tr data="我是第2排">
+        <td>21</td>
+        <td>22</td>
+        <td>23</td>
+    </tr>
+    <tr data="我是第3排">
+        <td>31</td>
+        <td>32</td>
+        <td>33</td>
+    </tr>
+    <tr data="我是第1排">
+        <td>11</td>
+        <td>12</td>
+        <td>13</td>
+    </tr>
+    <tr data="我是第2排">
+        <td>21</td>
+        <td>22</td>
+        <td>23</td>
+    </tr>
+    <tr data="我是第3排">
+        <td>31</td>
+        <td>32</td>
+        <td>33</td>
+    </tr>
+    </tbody>
+</table>
+
+<script type="text/javascript" src="../js/lib/jquery.js"></script>
+<script type="text/javascript" src="../js/selector.js"></script>
+<script type="text/javascript">
+    console.log("test");
+    testFun = function (callback) {
+        console.log("start fun ");
+        callback();
+    };
+    var s = new Selector({
+        title: "已选中的项：",
+        id: "selector",
+        context: this,
+        actions:[
+            {
+                name:"测试1",
+                action:function(){},
+                param:[]
+            }
+        ],
+        table: {
+            id: "target",
+            spliter:"&"
+        },
+        prop: {
+            width: "800px"
+//            height:"200px"
+        }
+//        listener: [
+//            {
+//                context: s,
+//                target: "pushItem",
+//                callback: function (p1, p2) {
+//                    console.log("catch push" + p1 + p2);
+//                },
+//                param: [1, 2],
+//                async: 1
+//            }
+//        ]
+    }).show();
+    s.bindListener({
+        context: s,
+        target: "pushItem",
+        listen: function (p1, p2) {
+            console.log("catch push" + p1 + p2);
+        },
+        param: [1, 2]
+    });
+    s.bindListener({
+        context: this,
+        target: "testFun",
+        listen: function () {
+            console.log("catch async");
+        },
+        async: 0
+    });
+    s.addActionButton({
+        name:"测试2",
+        action:function(a, b){console.log(s.getSelectedItems().join());console.log(a + " " + b);},
+        param:["param1","param2"]
+    });
+    setTimeout(testFun,2000,function(){
+        console.log("test Fun callback");
+    });
+</script>
+</body>
+</html>
