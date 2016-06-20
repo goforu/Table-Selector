@@ -31,6 +31,11 @@
     cursor: pointer;
     color: #ff0000;
     font-weight: bold;
+    opacity: 0.3;
+}
+.table-selector .selector-delete:hover
+{
+    opacity: 1;
 }
 
 .table-selector .selector-delete-all
@@ -46,10 +51,15 @@
     color:#FFFFFF;
     text-align: center;
     background: #FF0000;
+    opacity: 0.8;
     left: -10px;
     top:-10px;
 }
-.table-selector #selector-action-container
+.table-selector .selector-delete-all:hover
+{
+    opacity: 1;
+}
+.table-selector .selector-action-container
 {
     box-sizing: border-box;
     padding: 2px 5px 2px 5px;
@@ -65,15 +75,23 @@
     clear: both;
 }
 /*可选择表格*/
-table.selectable tbody tr
+table.selectable-tr tbody tr
 {
     cursor: copy;
 }
-table.selectable tbody tr:hover
+table.selectable-tr tbody tr:hover
 {
     background: #D3DFF5;
 }
-table.selectable tr.selected
+table.selectable-td tbody td
+{
+    cursor: copy;
+}
+table.selectable-td tbody td:hover
+{
+    background: #D3DFF5;
+}
+table.selectable tr.selected,td.selected
 {
     border: 3px dashed #6b6b6b;
     background: #c5c5c5;
