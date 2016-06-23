@@ -1,6 +1,5 @@
-/*选择器*/
-.table-selector
-{
+/*selector*/
+.table-selector {
     background: #F9F9F9;
     padding: 5px 10px 5px 10px;
     border: #EAEAEA 1px solid;
@@ -9,15 +8,15 @@
     margin: 10px 10px 10px 10px;
     box-sizing: border-box;
 }
-.table-selector > ul
-{
+
+.table-selector > ul {
     /*width: 80%;*/
     display: inline-block;
     margin: 0;
     padding: 0;
 }
-.table-selector > ul > li
-{
+
+.table-selector > ul > li {
     font-size: 16px;
     display: inline-block;
     border: darkblue 1px solid;
@@ -26,41 +25,19 @@
     margin: 2px;
     background: #E4E4E4;
 }
-.table-selector .selector-delete
-{
+
+.table-selector .selector-delete {
     cursor: pointer;
     color: #ff0000;
     font-weight: bold;
     opacity: 0.3;
 }
-.table-selector .selector-delete:hover
-{
+
+.table-selector .selector-delete:hover {
     opacity: 1;
 }
 
-.table-selector .selector-delete-all
-{
-    position: absolute;
-    display: inline-block;
-    margin: 3px;
-    height: 18px;
-    width: 18px;
-    font-weight: bold;
-    cursor: pointer;
-    border-radius: 50%;
-    color:#FFFFFF;
-    text-align: center;
-    background: #FF0000;
-    opacity: 0.8;
-    left: -10px;
-    top:-10px;
-}
-.table-selector .selector-delete-all:hover
-{
-    opacity: 1;
-}
-.table-selector .selector-action-container
-{
+.table-selector .selector-action-container {
     box-sizing: border-box;
     padding: 2px 5px 2px 5px;
     float: right;
@@ -68,31 +45,30 @@
     border-left: #7f7f7f 2px solid;
 }
 
-.table-selector:after
-{
+.table-selector:after {
     display: block;
     content: '';
     clear: both;
 }
-/*可选择表格*/
-table.selectable-tr tbody tr
-{
+
+/*table*/
+table.selectable-tr tbody tr {
     cursor: copy;
 }
-table.selectable-tr tbody tr:hover
-{
+
+table.selectable-tr tbody tr:hover {
     background: #D3DFF5;
 }
-table.selectable-td tbody td
-{
+
+table.selectable-td tbody td {
     cursor: copy;
 }
-table.selectable-td tbody td:hover
-{
+
+table.selectable-td tbody td:hover {
     background: #D3DFF5;
 }
-table.selectable tr.selected,td.selected
-{
+
+table.selectable tr.selected, td.selected {
     border: 3px dashed #6b6b6b;
     background: #c5c5c5;
 }
