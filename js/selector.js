@@ -18,7 +18,7 @@
  *          splitter:"," //split multiple data
  *      },
  *      listener:{ //trigger when a certain function called
- *          context:obj,//
+ *          scope:obj,//
  *          method:fn, //listened function
  *          action: function(){},//call after listened function called
  *          async:index// position of the argument in an async function
@@ -32,13 +32,11 @@
         this.index = jsn.index;
         this.actions = jsn.actions || [];
         this.table = jsn.table || {};
-        this.table.splitter = jsn.table.splitter || ",";
+        this.table.splitter = jsn.table.splitter;
         this.table.data = jsn.table.data || "data";
         this.table.type = jsn.table.type == "cell" ? "td" : "tr";
-        //this.id = jsn.id;
         this.node = $('#' + jsn.id);
         this.title = jsn.title;
-        //this.context = jsn.context;
         this.listeners = jsn.listeners || [];
         this.hidable = jsn.hidable == undefined ? true : jsn.hidable;
         this.style = jsn.style;
@@ -55,7 +53,7 @@
         //clear selected items
         clear: function () {
             this.selectedItems = [];
-            this.refreshRows();
+            this.refreshTable();
             this.node.find('.table-selector .table-selector-item').empty();
             this._showOrHide();
         },
@@ -77,19 +75,19 @@
             if (_t.listeners.length) {
                 $.each(_t.listeners, function (i, p) {
                     if (!p.original) {
-                        p.original = p.context[p.method];
+                        p.original = p.scope[p.method];
                     }
-                    p.context[p.method] = function () {
+                    p.scope[p.method] = function () {
                     var async = p.async != undefined && typeof arguments[p.async] === "function";
                         if (async) {
                             var tempFun = arguments[p.async];
                             arguments[p.async] = function () {
-                                var r = tempFun.apply(this, arguments);// won't work if callback function rely on context
+                                var r = tempFun.apply(this, arguments);// won't work if callback function rely on scope
                                 p.action();
                                 return r;
                             }
                         }
-                        var result = p.original.apply(p.context, arguments);
+                        var result = p.original.apply(this, arguments);
                         !async && p.action();
                         return result;
                     }
@@ -97,11 +95,11 @@
             }
             return this;
         },
-        unbindListener: function (context/*object*/, fn/*string*/) {
+        unbindListener: function (scope/*object*/, fn/*string*/) {
             var _t = this;
             $.each(_t.listeners, function (i, p) {
-                if (context[fn] === p.context[p.method]) {
-                    context[fn] = p.original;
+                if (scope[fn] === p.scope[p.method]) {
+                    scope[fn] = p.original;
                     _t.listeners.splice(i, 1);
                 }
             });
@@ -110,7 +108,7 @@
         unbindAllListeners: function () {
             var _t = this;
             $.each(_t.listeners, function (i, p) {
-                p.context[p.method] = p.original
+                p.scope[p.method] = p.original
             });
             _t.listeners = [];
             return this;
@@ -131,7 +129,7 @@
             }
         },
         //refresh after data changes
-        refreshRows: function (/*optional*/option, /*optional*/item) {
+        refreshTable: function (/*optional*/option, /*optional*/item) {
             var _t = this;
             if (_t.table.id) {
                 var list = [].concat(_t.selectedItems);
@@ -168,13 +166,11 @@
         },
 
         _render: function () {
-            var _t = this;
-            _t.style && _t.node.css($.extend(_t.style, {overflow: "auto"}));
-            _t.node.find('.table-selector .selector-action-container').empty();
-            _t._renderActionButton();
-            _t.title && _t.node.find('.table-selector .table-selector-title').text(_t.title);
-            _t.refreshRows();
-            _t._showOrHide();
+            this.style && this.node.css($.extend(this.style, {overflow: "auto"}));
+            this.renderActionButton();
+            this.title && this.node.find('.table-selector .table-selector-title').text(this.title);
+            this.refreshTable();
+            this._showOrHide();
         },
 
         show: function (obj) {
@@ -185,24 +181,24 @@
             return this;
         },
 
-        _renderActionButton: function () {
+        renderActionButton: function () {
             var _t = this;
-            _t.node.find('.table-selector .selector-action-container').empty();
+            var container = _t.node.find('.table-selector .selector-action-container').empty();
+            _t.actions.length > 0 ? container.addClass("haschild") : container.removeClass("haschild");
             $.each(_t.actions, function (i, p) {
                 var actionButton = '<input type="button" value="' + p.name + '"/>';
-                $(actionButton).appendTo(_t.node.find('.table-selector .selector-action-container')).on('click', function () {
-                    p.action.apply(p.context || _t);
+                $(actionButton).appendTo(container).on('click', function () {
+                    p.action.apply(p.scope || _t);
                     //p.action();
                 });
             });
         },
         //add button
         addActionButton: function (obj) {
-            var _t = this;
             if (obj != undefined) {
-                Object.prototype.toString.call(obj) === '[object Array]' ? _t.actions = _t.actions.concat(obj) : _t.actions.push(obj);
+                Object.prototype.toString.call(obj) === '[object Array]' ? this.actions = this.actions.concat(obj) : this.actions.push(obj);
             }
-            _t._renderActionButton();
+            this.renderActionButton();
             return this;
         },
 
@@ -213,12 +209,12 @@
             $(itemHtml).appendTo(_t.node.find(' .table-selector .table-selector-item')).children('.selector-delete').on('click', function () {
                 var index = $(this).parent().index();
                 $(this).parent().remove();
-                _t.refreshRows("remove", _t.selectedItems.splice(index, 1)[0]);
+                _t.refreshTable("remove", _t.selectedItems.splice(index, 1)[0]);
                 _t._showOrHide();
                 //$('.table-selector #selector-action-container').children().slice(i).remove();
             });
             this.selectedItems.push(item);
-            _t._showOrHide();
+            this._showOrHide();
             return this;
         },
 
@@ -249,10 +245,11 @@
             return this.selectedItems;
         },
         destroy: function(){
-            var _t = this;
-            _t.unbindAllListeners();
-            _t.table.id && $('#' + _t.table.id).removeClass('selectable').removeClass('selectable-' + _t.table.type);
-            _t.node.empty();
+            this.unbindAllListeners();
+            this.table.id && $('#' + this.table.id).removeClass('selectable').removeClass('selectable-' + this.table.type);
+            this.node.empty();
+            this.actions = [];
+            this.selectedItems = [];
         }
     };
 }(jQuery);

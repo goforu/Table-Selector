@@ -38,11 +38,14 @@
 }
 
 .table-selector .selector-action-container {
+}
+
+.table-selector .haschild{
+    border-left: #7f7f7f 2px solid;
     box-sizing: border-box;
     padding: 2px 5px 2px 5px;
     float: right;
     max-width: 30%;
-    border-left: #7f7f7f 2px solid;
 }
 
 .table-selector:after {

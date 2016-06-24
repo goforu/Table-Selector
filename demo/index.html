@@ -11,7 +11,6 @@
     </style>
 </head>
 <body>
-<div id="selector"></div>
 <table id="target">
     <thead>
     <tr>
@@ -23,91 +22,93 @@
     <tbody>
     <tr data="1st row">
         <td data="11">11</td>
-        <td>12</td>
-        <td>13</td>
+        <td data="12">12</td>
+        <td data="13">13</td>
     </tr>
     <tr data="2ed row">
-        <td>21</td>
+        <td data="21">21</td>
         <td data="22">22</td>
-        <td>23</td>
+        <td data="23">23</td>
     </tr>
     <tr data="3rd">
-        <td>31</td>
-        <td>32</td>
+        <td data="31">31</td>
+        <td data="32">32</td>
         <td data="33">33</td>
     </tr>
     <tr data="4th row">
-        <td>41</td>
-        <td>42</td>
-        <td>43</td>
+        <td data="41">41</td>
+        <td data="42">42</td>
+        <td data="43">43</td>
     </tr>
     <tr data="5th row">
-        <td>51</td>
-        <td>52</td>
-        <td>53</td>
-    </tr>
-    <tr data="5th row">
-        <td>51</td>
-        <td>52</td>
-        <td>53</td>
+        <td data="51">51</td>
+        <td data="52">52</td>
+        <td data="53">53</td>
     </tr>
     </tbody>
 </table>
+<div id="selector"></div>
 
 <script type="text/javascript" src="../js/lib/jquery.js"></script>
 <script type="text/javascript" src="../js/selector.js"></script>
 <script type="text/javascript">
-    constructorAction = function(){alert("I'm a constructor-generated!");};
+    // Create a table selector and show
     var s = new Selector({
         title: "selected items：",
-        id: "selector",
-        context: this,
-        actions:[
-            {
-                name:"constructor",
-                action:this.constructorAction
-            }
-        ],
-        table: {
+        id: "selector",// a container id for selector
+        table: {// target table
+            type: 'cell',//cell or row
+//            splitter:"&" //data split mark to show multiple data in one item
             id: "target"
-//            type: 'cell',
-//            splitter:"&"
         },
         style: {
             width: "800px"
-        },
-        listeners: [
-            {
-                context: this,
-                method: "constructorAction",//sync function
-                action: function () {
-                    alert("ConstructorAction listened!");
-                }
-            }
-        ]
+        }
     }).show();
 
+    // Add a button to the selector
     s.addActionButton({
-        name:"selected items",
-        action:function(){alert("You have selected: " + s.getSelectedItems().join());}
+        name: "selected items",
+        action: function () {
+            alert("You have selected: " + s.getSelectedItems().join());
+        }
     });
 
+    // Listen to a certain function and trigger an action when finishing
     s.bindListener({
-        context: s,
+        scope: s,
         method: "pushItem",//sync function
         action: function () {
             alert("you selected " + s.getSelectedItems()[s.getSelectedItems().length - 1]);
         }
     });
-//
-//    s.bindListener({
-//        context: this,
-//        method: "testFun",
-//        action: function () {
-//            console.log("catch async");
-//        },
-//        async: 0
-//    });
+
+    // Stimulate an async function
+    asyncFn = function (callback) {
+        setTimeout(function () {
+            callback();
+        }, 2000);
+        alert("async function has started, please wait...");
+    };
+    // Add a button to start the async operation
+    s.addActionButton({
+        name: "async",
+        action: function () {
+            asyncFn(function () {
+                alert("async function is done!");
+            });
+        }
+    });
+
+    // Listen to the async operation and trigger an action when finishing
+    s.bindListener({
+        scope: this,
+        method: "asyncFn",
+        action: function () {
+            alert("async function listened!");
+        },
+        async: 0// callback position in an async function
+    });
 </script>
 </body>
 </html>
