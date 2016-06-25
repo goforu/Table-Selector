@@ -32,7 +32,7 @@ new Selector({
 }).show();
 ```
 ###Advanced
-####Manipulate data
+####Manipulating data
 Sometimes we need to manipulate these selected data, like posting a request, showing a message, ect. Fortunately, selector provides us a very convenient way to handle this.
 ```javascript
 // Add a button to the selector
@@ -43,7 +43,7 @@ Sometimes we need to manipulate these selected data, like posting a request, sho
         }
     });
 ```
-####Add a lisener
+####Adding a listener
 In some cases, our table would be reloaded frequently. But we want table always agrees with data. One way is to call **refreshTable** method everytime reloading table. A more gorgeous way is to add a listener to a certain method which perform these changes. Selector can listen to both sync and async functions.
 ```javascript
 var dataHandler = {
