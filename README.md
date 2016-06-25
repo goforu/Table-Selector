@@ -3,13 +3,13 @@
 A Jquery Plugin to make a table selectable and shows the selected items at the same time. 
 ##Getting started
 ###1.Basic
-First we import three files into our project. Remeber jquery.js must be imported before seletor.js, cause selector is based on it.
+First we import three files into our project. Remeber jquery.js must be imported before seletor.js, cause selector relies on it.
 ```html
 <link rel="stylesheet" href="../css/selector.css">
 <script type="text/javascript" src="../js/lib/jquery.js"></script>
 <script type="text/javascript" src="../js/selector.js"></script>
 ```
-Then we add an attribute 'data' to each row so that selector can retrieve the selected data when clicked. If we want to retrieve data from cells, we can also add 'data' to each of them.
+Then we add an attribute 'data' to each row so that selector can retrieve selected data when clicked. If we want to retrieve data from cells, we can also add 'data' to each of them.
 ```html
 <tr data="1rd row">
 	<td>11</td>
@@ -33,7 +33,7 @@ new Selector({
 ```
 ###Advanced
 ####Manipulate data
-Sometimes we need to manipulate these selected data, like posting a request, showing a message, ect. Fortunately, it provides us a very convenient way to handle this.
+Sometimes we need to manipulate these selected data, like posting a request, showing a message, ect. Fortunately, selector provides us a very convenient way to handle this.
 ```javascript
 // Add a button to the selector
     selector.addActionButton({
@@ -44,7 +44,7 @@ Sometimes we need to manipulate these selected data, like posting a request, sho
     });
 ```
 ####Add a lisener
-In some cases, our table would change when new data is imported. But we want table always agrees with data. One way is to call **refreshTable** method everytime data changes. A more gorgeous way is to add a listener to a certain method which perform these changes. Selector can listen to both sync and async functions.
+In some cases, our table would be reloaded frequently. But we want table always agrees with data. One way is to call **refreshTable** method everytime reloading table. A more gorgeous way is to add a listener to a certain method which perform these changes. Selector can listen to both sync and async functions.
 ```javascript
 var dataHandler = {
 //sync function
@@ -78,4 +78,4 @@ selector.bindListener({
 });
 // Stimulate an async function
 ```
-Binding a listener can do far more work than just that. To know more, please refer to the demo in the repository below.
+Binding a listener can do far more work than just that. To know more, please refer to the demo in the repository.
