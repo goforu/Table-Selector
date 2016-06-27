@@ -1,6 +1,6 @@
 # Table-Selector
 ##Introdution
-A Jquery Plugin to make a table selectable and shows the selected items at the same time. 
+A jQuery plugin to make table rows or cells selectable and lists the selected ones.[demo](https://jsfiddle.net/goforu/a1L3fLnc/)
 ##Getting started
 ###1.Basic
 First we import three files into our project. Remeber jquery.js must be imported before seletor.js, cause selector relies on it.
