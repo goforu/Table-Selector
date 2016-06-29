@@ -1,6 +1,8 @@
 # Table-Selector
 ##Introdution
-A jQuery plugin to make table rows or cells selectable and lists the selected ones.[demo](https://jsfiddle.net/goforu/a1L3fLnc/)
+A jQuery plugin to make table rows or cells selectable and lists the selected ones. See [demo](https://jsfiddle.net/goforu/a1L3fLnc/).
+![row demo](/demo/demo_basic_row.gif?raw=true "Row Type")
+![cell demo](/demo/demo_basic_cell.gif?raw=true "Cell Type")
 ##Getting started
 ###1.Basic
 First we import three files into our project. Remeber jquery.js must be imported before seletor.js, cause selector relies on it.
@@ -33,6 +35,7 @@ new Selector({
 ```
 ###Advanced
 ####Manipulating data
+![button demo](/demo/demo_advanced_button.gif?raw=true "Adding a button")
 Sometimes we need to manipulate these selected data, like posting a request, showing a message, ect. Fortunately, selector provides us a very convenient way to handle this.
 ```javascript
 // Add a button to the selector
@@ -43,7 +46,8 @@ Sometimes we need to manipulate these selected data, like posting a request, sho
         }
     });
 ```
-####Adding a listener
+####Binding a listener
+![listener demo](/demo/demo_advanced_listener.gif?raw=true "Binding a listener")
 In some cases, our table would be reloaded frequently. But we want table always agrees with data. One way is to call **refreshTable** method everytime reloading table. A more gorgeous way is to add a listener to a certain method which perform these changes. Selector can listen to both sync and async functions.
 ```javascript
 var dataHandler = {
