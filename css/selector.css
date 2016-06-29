@@ -72,6 +72,5 @@ table.selectable-td tbody td:hover {
 }
 
 table.selectable tr.selected, td.selected {
-    border: 3px dashed #6b6b6b;
     background: #c5c5c5;
 }
