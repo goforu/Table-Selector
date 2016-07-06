@@ -35,7 +35,8 @@
         this.table.splitter = jsn.table.splitter;
         this.table.data = jsn.table.data || "data";
         this.table.type = jsn.table.type == "cell" ? "td" : "tr";
-        this.node = $('#' + jsn.id);
+        this.$tNode = $('#' + this.table.id);
+        this.$node = $('#' + jsn.id);
         this.title = jsn.title;
         this.listeners = jsn.listeners || [];
         this.hidable = jsn.hidable == undefined ? true : jsn.hidable;
@@ -43,37 +44,33 @@
     };
 
     Selector.prototype = {
-        _init: function (obj) {
-            var _t = this;
-            this.node = obj || this.node;
-            if (!this.node || !this.node[0] instanceof HTMLElement) throw new Error('object is undefined or is not an HTMLElement');
-            _t.table.id && $('#' + _t.table.id).addClass('selectable').addClass('selectable-' + _t.table.type);
-            _t.node.html(_t._template);
+        _init: function () {
+            if (!this.$node || !this.$node[0] instanceof HTMLElement) throw new Error('object is undefined or is not an HTMLElement');
+            this.$tNode.addClass('selectable').addClass('selectable-' + this.table.type);
+            this.$node.html(this._template);
         },
         //clear selected items
         clear: function () {
             this.selectedItems = [];
             this.refreshTable();
-            this.node.find('.table-selector .table-selector-item').empty();
+            this.$node.find('.table-selector .table-selector-item').empty();
             this._showOrHide();
         },
         _showOrHide: function () {
-            var _t = this;
-            if (!_t.hidable) return false;
-            if (_t.selectedItems.length > 0) {
-                _t.node.show()
+            if (!this.hidable) return false;
+            if (this.selectedItems.length > 0) {
+                this.$node.show()
             } else {
-                _t.node.hide();
+                this.$node.hide();
             }
         },
         //monkey patch
         bindListener: function (funObj) {
-            var _t = this;
             if (funObj != undefined) {
-                Object.prototype.toString.call(funObj) === '[object Array]' ? _t.listeners.concat(funObj) : _t.listeners.push(funObj);
+                Object.prototype.toString.call(funObj) === '[object Array]' ? this.listeners.concat(funObj) : this.listeners.push(funObj);
             }
-            if (_t.listeners.length) {
-                $.each(_t.listeners, function (i, p) {
+            if (this.listeners.length) {
+                $.each(this.listeners, function (i, p) {
                     if (!p.original) {
                         p.original = p.scope[p.method];
                     }
@@ -106,18 +103,17 @@
             return this;
         },
         unbindAllListeners: function () {
-            var _t = this;
-            $.each(_t.listeners, function (i, p) {
+            $.each(this.listeners, function (i, p) {
                 p.scope[p.method] = p.original
             });
-            _t.listeners = [];
+            this.listeners = [];
             return this;
         },
         //bind click events on table
         _bindEvent: function () {
             var _t = this;
-            if (_t.table.id) {
-                $('#' + _t.table.id).unbind().on('click', _t.table.type + '[' + _t.table.data + "]", function (e) {
+            if (this.table.id) {
+                this.$tNode.unbind().on('click', this.table.type + '[' + this.table.data + "]", function (e) {
                     if ($(e.target).is('a, input')) return;
                     if ($(this).toggleClass('selected').hasClass('selected')) {
                         _t.pushItem($(this).attr(_t.table.data).split(_t.table.splitter));
@@ -166,9 +162,9 @@
         },
 
         _render: function () {
-            this.style && this.node.css($.extend(this.style, {overflow: "auto"}));
+            this.style && this.$node.css($.extend(this.style, {overflow: "auto"}));
             this.renderActionButton();
-            this.title && this.node.find('.table-selector .table-selector-title').text(this.title);
+            this.title && this.$node.find('.table-selector .table-selector-title').text(this.title);
             this.refreshTable();
             this._showOrHide();
         },
@@ -183,9 +179,9 @@
 
         renderActionButton: function () {
             var _t = this;
-            var container = _t.node.find('.table-selector .selector-action-container').empty();
-            _t.actions.length > 0 ? container.addClass("haschild") : container.removeClass("haschild");
-            $.each(_t.actions, function (i, p) {
+            var container = this.$node.find('.table-selector .selector-action-container').empty();
+            this.actions.length > 0 ? container.addClass("haschild") : container.removeClass("haschild");
+            $.each(this.actions, function (i, p) {
                 var actionButton = '<input type="button" value="' + p.name + '"/>';
                 $(actionButton).appendTo(container).on('click', function () {
                     p.action.apply(p.scope || _t);
@@ -206,7 +202,7 @@
             var _t = this;
             if (typeof item === 'string') item = [item];
             var itemHtml = '<li><span class="selector-delete">×</span>' + item.join(':') + '</li>';
-            $(itemHtml).appendTo(_t.node.find(' .table-selector .table-selector-item')).children('.selector-delete').on('click', function () {
+            $(itemHtml).appendTo(_t.$node.find(' .table-selector .table-selector-item')).children('.selector-delete').on('click', function () {
                 var index = $(this).parent().index();
                 $(this).parent().remove();
                 _t.refreshTable("remove", _t.selectedItems.splice(index, 1)[0]);
@@ -225,7 +221,7 @@
                 if (_t._isDataEqual(p, item)) {
                     _t.selectedItems.splice(i, 1);
                     _t._showOrHide();
-                    _t.node.find('.table-selector .table-selector-item').children().slice(i, i + 1).remove();
+                    _t.$node.find('.table-selector .table-selector-item').children().slice(i, i + 1).remove();
                     return false;
                 }
             });
@@ -247,7 +243,7 @@
         destroy: function(){
             this.unbindAllListeners();
             this.table.id && $('#' + this.table.id).removeClass('selectable').removeClass('selectable-' + this.table.type);
-            this.node.empty();
+            this.$node.empty();
             this.actions = [];
             this.selectedItems = [];
         }
