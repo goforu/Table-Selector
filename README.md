@@ -25,12 +25,9 @@ Then we need a container to hold our selector.
 ```
 Finally, we can make our selector work by generating an instance.
 ```javascript
-new Selector({
-  id: "selector",// seletor id
-  table: {
-//    type:"cell",//'cell' to make cells selectable
-    id: "tableid"//table id
-  }
+//target table
+$('#target').Selector({
+  id: "selector"// seletor id
 }).show();
 ```
 ###Advanced
