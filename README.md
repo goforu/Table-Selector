@@ -27,9 +27,6 @@ Finally, we can make our selector work by generating an instance.
 ```javascript
 $('#target').Selector({
   id: "selector",// seletor id
-  table: {
-//    type:"cell",//'cell' to make cells selectable
-  }
 }).show();
 ```
 ###Advanced
