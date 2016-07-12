@@ -25,8 +25,9 @@ Then we need a container to hold our selector.
 ```
 Finally, we can make our selector work by generating an instance.
 ```javascript
+//target table
 $('#target').Selector({
-  id: "selector",// seletor id
+  id: "selector"// seletor id
 }).show();
 ```
 ###Advanced
