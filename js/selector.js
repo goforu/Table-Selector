@@ -51,7 +51,7 @@
             this.selectedItems = [];
             this.$tNode = $(_this);
             this.$node = $('#' + settings.id);
-            this.type = settings == "cell" ? "td" : "tr";
+            this.type = settings.table.type == "cell" ? "td" : "tr";
         }
 
         Instance.prototype = {
