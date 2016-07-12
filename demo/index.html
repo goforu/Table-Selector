@@ -30,7 +30,7 @@
         <td data="22">22</td>
         <td data="23">23</td>
     </tr>
-    <tr data="3rd">
+    <tr data="3rd row">
         <td data="31">31</td>
         <td data="32">32</td>
         <td data="33">33</td>
@@ -53,9 +53,9 @@
 <script type="text/javascript" src="../js/selector.js"></script>
 <script type="text/javascript">
     // Create a table selector and show
-    var s = new Selector({
+    var s = $('#target').Selector({
+        id: "selector",
         title: "selected items：",
-        id: "selector",// a container id for selector
         table: {// target table
             type: 'cell',//cell or row
 //            splitter:"&" //data split mark to show multiple data in one item
@@ -109,6 +109,8 @@
         },
         async: 0// callback position in an async function
     });
+
+
 </script>
 </body>
 </html>
