@@ -28,10 +28,29 @@
  *
  * by Goforu
  */
-+function ($) {
+(function (window, factory) {
+    // universal module definition
+    if (typeof define === 'function' && define.amd) {
+        // AMD
+        define(['jquery'], factory);
+    } else if (typeof exports === 'object') {
+        // CommonJS
+        module.exports = factory(
+            require('jquery')
+        );
+    } else {
+        // browser global
+        window.Masonry = factory(
+            window.jQuery
+        );
+    }
 
+}(window, function factory(jQuery) {
+    // make jquery plugin
     $.fn.Selector = function (options) {
+        // user costume settings
         var settings = {};
+        // default settings
         var defaults = {
             selectedItems: [],
             actions: [],
@@ -44,17 +63,24 @@
         };
 
         var _this = this;
-
+        // extend settings from user options
         $.extend(true, settings, defaults, options);
+        // selector instance
         function Instance() {
+            // selector template
             this._template = '<div class="table-selector"><div class="table-selector-title"></div><ul class="table-selector-item"></ul> <div class="selector-action-container"></div></div>';
+            // data of selected rows or cells
             this.selectedItems = [];
+            // target table jquery object
             this.$tNode = $(_this);
+            // selector jquery object
             this.$node = $('#' + settings.id);
+            // cell or row selectable
             this.type = settings.table.type == "cell" ? "td" : "tr";
         }
 
         Instance.prototype = {
+            // init jquery object
             _init: function () {
                 if (!this.$node || !this.$node[0] instanceof HTMLElement) throw new Error('object is undefined or is not an HTMLElement');
                 this.$tNode.addClass('selectable').addClass('selectable-' + this.type);
@@ -67,6 +93,7 @@
                 this.$node.find('.table-selector .table-selector-item').empty();
                 this._showOrHide();
             },
+            // if allow selector to show when no item selected according to the setting 'hidable'
             _showOrHide: function () {
                 if (!settings.hidable) return false;
                 if (this.selectedItems.length > 0) {
@@ -75,7 +102,7 @@
                     this.$node.hide();
                 }
             },
-            //monkey patch
+            //monkey patch; bind listener to a certain method; This method is often used to listen to data change
             bindListener: function (funObj) {
                 if (funObj != undefined) {
                     Object.prototype.toString.call(funObj) === '[object Array]' ? settings.listeners.concat(funObj) : settings.listeners.push(funObj);
@@ -83,18 +110,24 @@
                 if (settings.listeners.length) {
                     $.each(settings.listeners, function (i, p) {
                         if (!p.original) {
+                            // store the target function
                             p.original = p.scope[p.method];
                         }
+                        //add something to the function
                         p.scope[p.method] = function () {
+                            // if the function is async
                             var async = p.async != undefined && typeof arguments[p.async] === "function";
                             if (async) {
+                                // get the callback function
                                 var tempFun = arguments[p.async];
+                                // add something to the callback function
                                 arguments[p.async] = function () {
-                                    var r = tempFun.apply(this, arguments);// won't work if callback function rely on scope
+                                    var r = tempFun.apply(this, arguments);
                                     p.action();
                                     return r;
                                 }
                             }
+
                             var result = p.original.apply(this, arguments);
                             !async && p.action();
                             return result;
@@ -103,6 +136,7 @@
                 }
                 return this;
             },
+            // unbind a certain listener
             unbindListener: function (scope/*object*/, fn/*string*/) {
                 $.each(settings.listeners, function (i, p) {
                     if (scope[fn] === p.scope[p.method]) {
@@ -112,6 +146,7 @@
                 });
                 return this;
             },
+            // unbind all the listeners
             unbindAllListeners: function () {
                 $.each(settings.listeners, function (i, p) {
                     p.scope[p.method] = p.original
@@ -132,7 +167,7 @@
                 });
 
             },
-            //refresh after data changes
+            //refresh table after data changes
             refreshTable: function (/*optional*/option, /*optional*/item) {
                 var _t = this;
                 var list = [].concat(this.selectedItems);
@@ -157,7 +192,7 @@
                 });
                 return this;
             },
-
+            // check if two items are equal
             _isDataEqual: function (data1, data2) {
                 for (var i = 0; i < data1.length; ++i) {
                     if (data1[i] !== data2[i]) {
@@ -166,7 +201,7 @@
                 }
                 return true;
             },
-
+            // render selector style, buttons, title and target table
             _render: function () {
                 settings.style && this.$node.css($.extend(settings.style, {overflow: "auto"}));
                 this.renderActionButton();
@@ -174,7 +209,7 @@
                 this.refreshTable();
                 this._showOrHide();
             },
-
+            // everything is ready after calling this method
             show: function (obj) {
                 this._init(obj);
                 this._render();
@@ -182,7 +217,7 @@
                 this._bindEvent();
                 return this;
             },
-
+            // render all the buttons in selector
             renderActionButton: function () {
                 var _t = this;
                 var container = this.$node.find('.table-selector .selector-action-container').empty();
@@ -195,7 +230,7 @@
                     });
                 });
             },
-            //add button
+            //add button to selector
             addActionButton: function (obj) {
                 if (obj != undefined) {
                     Object.prototype.toString.call(obj) === '[object Array]' ? settings.actions = settings.actions.concat(obj) : settings.actions.push(obj);
@@ -203,7 +238,7 @@
                 this.renderActionButton();
                 return this;
             },
-
+            // put an item to selectedItem array
             pushItem: function (item) {
                 var _t = this;
                 if (typeof item === 'string') item = [item];
@@ -219,7 +254,7 @@
                 this._showOrHide();
                 return this;
             },
-
+            //remove an item from selectedItem array
             removeItem: function (item) {
                 var _t = this;
                 //var index = _t.index;
@@ -233,7 +268,7 @@
                 });
                 return this;
             },
-
+            // get all the selected items. if index is not undefined, it will only return a certain-ind
             getSelectedItems: function () {
                 if (settings.index != undefined) {
                     var rst = [];
@@ -255,4 +290,5 @@
 
         return new Instance();
     };
-}(jQuery);
+
+}));
