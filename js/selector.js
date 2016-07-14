@@ -45,7 +45,7 @@
         );
     }
 
-}(window, function factory(jQuery) {
+}(window, function factory($) {
     // make jquery plugin
     $.fn.Selector = function (options) {
         // user costume settings
@@ -257,7 +257,6 @@
             //remove an item from selectedItem array
             removeItem: function (item) {
                 var _t = this;
-                //var index = _t.index;
                 $.each(this.selectedItems, function (i, p) {
                     if (_t._isDataEqual(p, item)) {
                         _t.selectedItems.splice(i, 1);
