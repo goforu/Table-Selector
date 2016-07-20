@@ -281,9 +281,9 @@
             },
             destroy: function () {
                 this.unbindAllListeners();
-                this.$node.removeClass('selectable').removeClass('selectable-' + this.type);
+                this.$tNode.removeClass('selectable').removeClass('selectable-' + this.type);
+                this.$tNode.unbind();
                 this.$node.empty();
-                settings = [];
             }
         };
 
