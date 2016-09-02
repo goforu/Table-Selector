@@ -40,7 +40,7 @@
         );
     } else {
         // browser global
-        window.Masonry = factory(
+        window.Selector = factory(
             window.jQuery
         );
     }
