@@ -5,13 +5,13 @@ A jQuery plugin to make table rows or cells selectable and lists the selected on
 ![cell demo](/demo/demo_basic_cell.gif?raw=true "Cell Type")
 ##Getting started
 ###1.Basic
-First we import three files into our project. Remeber jquery.js must be imported before seletor.js, cause selector relies on it.
+At first, we import three files into our project. Remeber jquery.js must be imported before seletor.js, cuz selector relies on it.
 ```html
 <link rel="stylesheet" href="../css/selector.css">
 <script type="text/javascript" src="../js/lib/jquery.js"></script>
 <script type="text/javascript" src="../js/selector.js"></script>
 ```
-Then we add an attribute 'data' to each row so that selector can retrieve selected data when clicked. If we want to retrieve data from cells, we can also add 'data' to each of them.
+Then we add an attribute 'data' to each row so that selector can retrieve selected data once clicked. If we want to retrieve data from cells, we can also add 'data' to each of them.
 ```html
 <tr data="1rd row">
 	<td>11</td>
